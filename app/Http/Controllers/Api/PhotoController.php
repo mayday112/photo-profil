@@ -68,13 +68,16 @@ class PhotoController extends Controller
      */
     public function show(string $id)
     {
+        try {
+            $photo = Photo::where('user_id', $id)->first();
+            if (!$photo) return new PhotoResource(false, "Data tidak ditemukan", null);
 
-        $photo = Photo::where('user_id', $id)->first(['id', 'user_id', 'photo_path']);
-        if ($photo) return new PhotoResource(false, "Data tidak ditemukan", null);
+            $photo_path = $photo->photo_path;
 
-        $photo_path = $photo->photo_path;
-
-        return new PhotoResource(true, "Data anda", $photo_path);
+            return new PhotoResource(true, "Data anda", $photo_path);
+        } catch (\Throwable $th) {
+            return new PhotoResource(true, "Data tidak ditemukan", $th->getMessage());
+        }
     }
 
     /**

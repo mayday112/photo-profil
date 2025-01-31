@@ -100,7 +100,7 @@ class PhotoController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $photo = Photo::where('user_id', $id)->get()[0];
+        $photo = Photo::where('user_id', $id)->first();
         if (!$photo) return new PhotoResource(false, "Data tidak ditemukan", null);
 
         $data = $request->all();

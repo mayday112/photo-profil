@@ -150,7 +150,7 @@ class PhotosController extends Controller
 
     private function savePhotos(UploadedFile $file){
         $imageName = Str::random(5) .$file->getClientOriginalName();
-        $imagePath = public_path() . '/storage/photos/' . $imageName;
+        $imagePath = public_path(). '/storage/photos/' . $imageName;
         $imageManager = new ImageManager(new Driver());
         $image = $imageManager->read($file->getRealPath());
         $image->cover(300, 300);

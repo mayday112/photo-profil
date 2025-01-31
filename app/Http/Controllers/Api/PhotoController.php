@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManager;
 use App\Http\Resources\PhotoResource;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 // use Intervention\Image\Drivers\Imagick\Driver;
@@ -67,10 +68,11 @@ class PhotoController extends Controller
      */
     public function show(string $id)
     {
-        $photo = Photo::where('user_id', $id)->get(['id', 'user_id', 'photo_path']);
-        $photo_path = $photo[0]->photo_path;
 
-        if ($photo === null) return new PhotoResource(false, "Data tidak ditemukan", null);
+        $photo = Photo::where('user_id', $id)->first(['id', 'user_id', 'photo_path']);
+        if ($photo) return new PhotoResource(false, "Data tidak ditemukan", null);
+
+        $photo_path = $photo->photo_path;
 
         return new PhotoResource(true, "Data anda", $photo_path);
     }
@@ -183,6 +185,7 @@ class PhotoController extends Controller
             Storage::disk('public')->delete((string) $photo_path);
         }
     }
+
     private function savePhoto(UploadedFile $file)
     {
         $imageName = Str::random(5) . $file->getClientOriginalName();

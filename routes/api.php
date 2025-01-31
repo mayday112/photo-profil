@@ -9,4 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('photo', PhotoController::class);
-Route::post('save-photo/{phone}', [PhotoController::class, 'storePhoto']);
+Route::post('save-photo/{phone}', [PhotoController::class, 'storePhoto'])->name('save-photo');
